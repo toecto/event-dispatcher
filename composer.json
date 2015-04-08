@@ -1,0 +1,17 @@
+{
+    "name": "reactor/event-dispatcher",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maxim Popov",
+            "email": "maxim@zalil.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+
+    "autoload": {
+        "psr-4": {
+            "Reactor\\Events\\": "src/"
+        }
+    }
+}
