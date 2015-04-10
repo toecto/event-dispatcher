@@ -2,7 +2,7 @@
 
 namespace Reactor\Events;
 
-class DispatcherStack extends Dispatcher {
+class DispatcherQueue extends Dispatcher {
 
 	protected $events = array();
 
