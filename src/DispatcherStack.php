@@ -13,16 +13,16 @@ class DispatcherStack extends Dispatcher {
 
 	private function process() {
 		while ( $event = $this->loadEvent() ) {
-			parent::raise($event);
+			parent::dispatch($event);
 		}
 	}
 
 	private function loadEvent() {
-		return array_shift($this->stack);
+		return array_shift($this->events);
 	}
 
 	public function storeEvent(Event $event) {
-		$this->stack[] = $event;
+		$this->events[] = $event;
 	}
 
 }
