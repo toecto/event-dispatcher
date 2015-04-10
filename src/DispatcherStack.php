@@ -7,12 +7,11 @@ class DispatcherStack extends Dispatcher {
 	protected $stack = array();
 
 	public function raise(Event $event) {
-		$this->pushStack($event);
-		return $this->processStack();
+		$this->push($event);
 	}
 
 	private function processStack() {
-		while ( $event = $this->popStack() ) {
+		while ( $event = $this->pop() ) {
 			parent::raise($event);
 		}
 		return $this;
