@@ -25,7 +25,7 @@ class Dispatcher {
         return $this;
     }
 
-    public function raise(Event $event) {
+    public function dispatch(Event $event) {
         $listeners = $this->getListeners($event->getName());
         foreach ($listeners as $callbacks) {
             call_user_func($callbacks, $event, $this);
