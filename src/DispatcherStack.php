@@ -26,5 +26,3 @@ class DispatcherStack extends Dispatcher {
 	}
 
 }
-
-?>
