@@ -17,7 +17,7 @@ class DispatcherStack extends Dispatcher {
 		}
 	}
 
-	private function loadEvent() {
+	protected function loadEvent() {
 		return array_shift($this->events);
 	}
 
