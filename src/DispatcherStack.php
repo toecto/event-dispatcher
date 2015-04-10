@@ -11,7 +11,7 @@ class DispatcherStack extends Dispatcher {
 		return $this;
 	}
 
-	private function process() {
+	public function process() {
 		while ( $event = $this->loadEvent() ) {
 			parent::dispatch($event);
 		}
@@ -21,7 +21,7 @@ class DispatcherStack extends Dispatcher {
 		return array_shift($this->events);
 	}
 
-	public function storeEvent(Event $event) {
+	protected function storeEvent(Event $event) {
 		$this->events[] = $event;
 	}
 
