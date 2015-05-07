@@ -10,7 +10,7 @@ Lightvert, support Event Name routing with wild cards, similar as RabbitMQ wild 
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:toecto/event-dispatcher.git"
+            "url": "https://github.com/toecto/event-dispatcher.git"
         }
     ],
     "require": {
