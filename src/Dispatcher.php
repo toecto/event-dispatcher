@@ -4,17 +4,21 @@ namespace Reactor\Events;
 
 class Dispatcher {
 
-    protected $wildcard = '*';
+    protected $wildcard = '#';
+    protected $wordcard = '*';
     protected $divider = '.';
     protected $listeners = array();
+    protected $cache = array();
 
-    public function setTokens($wildcard, $divider) {
+
+    public function setTokens($wildcard, $wordcard, $divider = '.') {
         $this->wildcard = $wildcard;
         $this->divider = $divider;
     }
 
     public function addListener($event_name, $callable) {
-        $this->listeners[$event_name][] = $callable;
+        $this->listeners[$this->getPregMask($event_name)][] = $callable;
+        $this->cache = array();
         return $this;
     }
 
@@ -34,18 +38,23 @@ class Dispatcher {
     }
 
     public function getListeners($event_name) {
-        $listeners = array();
-        foreach ($this->getSuperEventNames($event_name) as $s_event_name) {
-            $listeners = array_merge($listeners, $this->getListenersStrict($s_event_name));
+        if (isset($this->cache[$event_name])) {
+            return $this->cache[$event_name];
         }
-        return $listeners;
+        $matched_listeners = array();
+        foreach ($this->listeners as $mask => $listeners) {
+            if (preg_match($mask, $event_name)) {
+                $matched_listeners = array_merge($matched_listeners, $listeners);
+            }
+        }
+        $this->cache[$event_name] = $matched_listeners;
+        return $matched_listeners;
     }
 
-    protected function getListenersStrict($event_name) {
-        if (isset($this->listeners[$event_name])) {
-            return $this->listeners[$event_name];
-        }
-        return array();
+    protected function getPregMask($event_mask) {
+        $all = '.+';
+        $element = '[^'.preg_quote($this->divider).']+';
+        return '/^'.str_replace(array($all, $element), array($all, $element), $event_mask).'$/';
     }
 
     protected function getSuperEventNames($event_name) {
