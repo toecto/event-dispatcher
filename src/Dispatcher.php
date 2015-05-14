@@ -5,15 +5,16 @@ namespace Reactor\Events;
 class Dispatcher {
 
     protected $wildcard = '#';
-    protected $wordcard = '*';
-    protected $divider = '.';
+    protected $wordcard = '\*';
+    protected $divider = '\.';
     protected $listeners = array();
     protected $cache = array();
 
 
     public function setTokens($wildcard, $wordcard, $divider = '.') {
-        $this->wildcard = $wildcard;
-        $this->divider = $divider;
+        $this->wildcard = preg_quote($wildcard, '/');
+        $this->wordcard = preg_quote($wordcard, '/');
+        $this->divider = preg_quote($divider, '/');
     }
 
     public function addListener($event_name, $callable) {
@@ -31,8 +32,8 @@ class Dispatcher {
 
     public function dispatch(Event $event) {
         $listeners = $this->getListeners($event->getName());
-        foreach ($listeners as $callbacks) {
-            call_user_func($callbacks, $event, $this);
+        foreach ($listeners as $callback) {
+            call_user_func($callback, $event, $this);
         }
         return $this;
     }
@@ -52,9 +53,13 @@ class Dispatcher {
     }
 
     protected function getPregMask($event_mask) {
-        $all = '.+';
-        $element = '[^'.preg_quote($this->divider).']+';
-        return '/^'.str_replace(array($all, $element), array($all, $element), $event_mask).'$/';
+        $event_mask = preg_quote($event_mask, '/');
+        $wildcard = '.+';
+        $wordcard = '[^' . $this->divider . ']+';
+        return '/^' . str_replace(
+            array($this->wildcard, $this->wordcard),
+            array($wildcard, $wordcard),
+            $event_mask) . '$/';
     }
 
     protected function getSuperEventNames($event_name) {
