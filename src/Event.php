@@ -5,17 +5,11 @@ namespace Reactor\Events;
 class Event {
     
     protected $name;
-    protected $message;
     protected $data;
 
-    public function __construct($name, $message = null, $data = null) {
+    public function __construct($name, $data = null) {
         $this->name = $name;
-        $this->message = $message;
         $this->data = $data;
-    }
-
-    public function getMessage() {
-        return $this->message;
     }
 
     public function getName() {
