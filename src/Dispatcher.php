@@ -10,7 +10,6 @@ class Dispatcher {
     protected $listeners = array();
     protected $cache = array();
 
-
     public function setTokens($wildcard, $wordcard, $divider = '.') {
         $this->wildcard = preg_quote($wildcard, '/');
         $this->wordcard = preg_quote($wordcard, '/');
@@ -33,7 +32,7 @@ class Dispatcher {
     public function dispatch(Event $event) {
         $listeners = $this->getListeners($event->getName());
         foreach ($listeners as $callback) {
-            call_user_func($callback, $event, $this);
+            call_user_func($callback, $event);
         }
         return $this;
     }
